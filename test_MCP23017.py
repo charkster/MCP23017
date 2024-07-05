@@ -1,13 +1,12 @@
-from __future__ import print_function
-from MCP23017   import MCP23017
+import smbus
+from MCP23017 import MCP23017
 import time
 
-# GPB7 has a voltmeter attached (reading only)
-# GPB6 has INTB connected to it
-# GPB5 has INTA connected to it
-# GPB4 is connected to GPA0
+i2c = smbus.SMBus(1) # raspberry pi
+# import machine
+# i2c = machine.I2C(1,sda=machine.Pin(6), scl=machine.Pin(7), freq=400000) #xiao rp2040
 
-GPIO = MCP23017(address=0x20, debug=False) # all address pins are tied low, reset is tied high
+GPIO = MCP23017(i2c=i2c, slave_id=0x20, debug=True)
 GPIO.setup(pin='b7', direction=GPIO.OUT, out_val=GPIO.HIGH)
 GPIO.setup(pin='b4', direction=GPIO.OUT, out_val=GPIO.LOW)
 GPIO.setup(pin='a0', direction=GPIO.IN,  int_en=True, int_defval=GPIO.LOW)
